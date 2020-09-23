@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2020/09/15 16:53:29.000.010,=D:\Belizario\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2020/09/15 16:54:13.000.190,D:\Belizario\Documents\Embarcadero\Studio\Projects\Unit1.dfm=D:\Dev\Projetos\Omnium\Source\FCI\uFrmPrincipal.dfm</Transaction>
+    <Transaction>2020/09/15 16:54:13.000.190,D:\Belizario\Documents\Embarcadero\Studio\Projects\Unit1.pas=D:\Dev\Projetos\Omnium\Source\FCI\uFrmPrincipal.pas</Transaction>
+    <Transaction>2020/09/15 16:55:08.000.395,D:\Belizario\Documents\Embarcadero\Studio\Projects\Project1.dproj=D:\Dev\Projetos\Omnium\Source\FCI\pgfci.dproj</Transaction>
+    <Transaction>2020/09/15 16:55:14.000.784,=D:\Dev\Projetos\Omnium\Source\FCI\Unit1.pas</Transaction>
+    <Transaction>2020/09/15 16:55:46.000.902,D:\Dev\Projetos\Omnium\Source\FCI\Unit1.pas=D:\Dev\Projetos\Omnium\Source\FCI\ACBrFCI.pas</Transaction>
+    <Transaction>2020/09/17 20:00:34.000.376,D:\Dev\Projetos\Omnium\Source\FCI\FCI_Demo.dproj=D:\Dev\Projetos\Omnium\Source\FCI\pgfci.dproj</Transaction>
+  </Transactions>
+</BorlandProject>
