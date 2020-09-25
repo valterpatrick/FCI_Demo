@@ -561,9 +561,9 @@ begin
     vRegistro := vRegistro + Trim(Copy(Registros_5020[I].FCodigoMercadoria, 1, 50)) + PIPE;
     vRegistro := vRegistro + Trim(Copy(Registros_5020[I].FCodigoGtin, 1, 14)) + PIPE;
     vRegistro := vRegistro + ValidarUnidadeProduto(Trim(Copy(Registros_5020[I].FUnidadeMedida, 1, 6))) + PIPE;
-    vRegistro := vRegistro + Trim(Copy(FormatFloat(',0.00', Registros_5020[I].FValorSaidaMercadoria), 1, 17)) + PIPE;
-    vRegistro := vRegistro + Trim(Copy(FormatFloat(',0.00', Registros_5020[I].FValorParcelaImportada), 1, 17)) + PIPE;
-    vRegistro := vRegistro + Trim(Copy(FormatFloat(',0.00', Registros_5020[I].FPercentualConteudoImportacao), 1, 8));
+    vRegistro := vRegistro + ReplaceStr(Trim(Copy(FormatFloat(',0.00', Registros_5020[I].FValorSaidaMercadoria), 1, 17)), '.', '')  + PIPE;
+    vRegistro := vRegistro + ReplaceStr(Trim(Copy(FormatFloat(',0.00', Registros_5020[I].FValorParcelaImportada), 1, 17)), '.', '') + PIPE;
+    vRegistro := vRegistro + ReplaceStr(Trim(Copy(FormatFloat(',0.00', Registros_5020[I].FPercentualConteudoImportacao), 1, 8)), '.', '');
 
     GravarRegistro('5020', vRegistro);
   end;
