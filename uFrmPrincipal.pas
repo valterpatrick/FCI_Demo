@@ -3,9 +3,24 @@ unit uFrmPrincipal;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, Data.DB, Vcl.Grids,
-  Vcl.DBGrids, Datasnap.DBClient, Vcl.ExtDlgs, ACBrFCI;
+  Winapi.Windows, 
+  Winapi.Messages, 
+  System.SysUtils, 
+  System.Variants, 
+  System.Classes, 
+  Vcl.Graphics,
+  Vcl.Controls, 
+  Vcl.Forms, 
+  Vcl.Dialogs, 
+  Vcl.StdCtrls, 
+  Vcl.Buttons, 
+  Vcl.ExtCtrls, 
+  Data.DB, 
+  Vcl.Grids,
+  Vcl.DBGrids, 
+  Datasnap.DBClient, 
+  Vcl.ExtDlgs, 
+  ACBrFCI;
 
 type
   TFrmPrincipal = class(TForm)
@@ -91,16 +106,17 @@ implementation
 
 procedure TFrmPrincipal.BtnFecharClick(Sender: TObject);
 begin
-  if Application.MessageBox('Tem certeza que deseja fechar o programa?', 'Confirmação', MB_ICONQUESTION + MB_YESNO) = ID_YES then
+  if Application.MessageBox('Tem certeza que deseja fechar o programa?', 'ConfirmaÃ§Ã£o', MB_ICONQUESTION + MB_YESNO) = ID_YES then
     Close;
 end;
 
 procedure TFrmPrincipal.BtnGerarRemessaClick(Sender: TObject);
 var
-  vArquivo: String;
+  LArquivo: String;
 begin
+  FCI := TACBrFCI.Create(Self);
   try
-    FCI := TACBrFCI.Create(Self);
+
 
     FCI.DirArqRemessa := ExtractFileDir(EdtArquivoRemessa.Text);
     FCI.NomeArqRemessa := ExtractFileName(EdtArquivoRemessa.Text);
@@ -133,8 +149,8 @@ begin
       CDSProdutos.Next;
     end;
 
-    vArquivo := FCI.GerarRegistros;
-    Application.MessageBox(PWideChar('Arquivo gerado com sucesso. "' + vArquivo + '".'), 'Informação', MB_ICONINFORMATION + MB_OK);
+    LArquivo := FCI.GerarRegistros;
+    Application.MessageBox(PWideChar(Format('Arquivo gerado com sucesso. "%s".',[LArquivo])), 'InformaÃ§Ã£o', MB_ICONINFORMATION + MB_OK);
   finally
     FCI.Free;
   end;
@@ -145,44 +161,47 @@ var
   I: Integer;
 begin
   FCI := TACBrFCI.Create(Self);
+  try
+    FCI.DirArqRetorno := ExtractFileDir(EdtArquivoRetorno.Text);
+    FCI.NomeArqRetorno := ExtractFileName(EdtArquivoRetorno.Text);
+    FCI.LerRetorno;
 
-  FCI.DirArqRetorno := ExtractFileDir(EdtArquivoRetorno.Text);
-  FCI.NomeArqRetorno := ExtractFileName(EdtArquivoRetorno.Text);
-  FCI.LerRetorno;
+    EdtCNPJ.Text := FCI.Registro_0010.CNPJContribuinte;
+    EdtRazaoSocial.Text := FCI.Registro_0010.RazaoSocial;
+    EdtInscEstadual.Text := FCI.Registro_0010.InscricaoEstadual;
+    EdtEndereco.Text := FCI.Registro_0010.Endereco;
+    EdtCEP.Text := FCI.Registro_0010.Cep;
+    EdtMunicipio.Text := FCI.Registro_0010.Municipio;
+    CmbUF.Text := FCI.Registro_0010.UF;
+    EdtHashCode.Text := FCI.Registro_0000.HashCode;
+    EdtDataRecepArq.Text := DateToStr(FCI.Registro_0000.DataRecepcaoArquivo);
+    EdtDataValidArq.Text := DateToStr(FCI.Registro_0000.DataValidacaoArquivo);
+    EdtCodRecepArq.Text := FCI.Registro_0000.CodigoRecepcaoArquivo;
+    EdtIndValid.Text := FCI.Registro_0000.IndicadorValidacaoArquivo;
 
-  EdtCNPJ.Text := FCI.Registro_0010.CNPJContribuinte;
-  EdtRazaoSocial.Text := FCI.Registro_0010.RazaoSocial;
-  EdtInscEstadual.Text := FCI.Registro_0010.InscricaoEstadual;
-  EdtEndereco.Text := FCI.Registro_0010.Endereco;
-  EdtCEP.Text := FCI.Registro_0010.Cep;
-  EdtMunicipio.Text := FCI.Registro_0010.Municipio;
-  CmbUF.Text := FCI.Registro_0010.UF;
-  EdtHashCode.Text := FCI.Registro_0000.HashCode;
-  EdtDataRecepArq.Text := DateToStr(FCI.Registro_0000.DataRecepcaoArquivo);
-  EdtDataValidArq.Text := DateToStr(FCI.Registro_0000.DataValidacaoArquivo);
-  EdtCodRecepArq.Text := FCI.Registro_0000.CodigoRecepcaoArquivo;
-  EdtIndValid.Text := FCI.Registro_0000.IndicadorValidacaoArquivo;
+    CDSProdutos.Close;
+    CDSProdutos.CreateDataSet;
+    CDSProdutos.Open;
+    for I := 0 to FCI.Registros_5020.Count - 1 do
+    begin
+      CDSProdutos.Append;
+      CDSProdutosNomeMercadoria.AsString := FCI.Registros_5020.Objects[I].NomeMercadoria;
+      CDSProdutosCodigoMercadoria.AsString := FCI.Registros_5020.Objects[I].CodigoMercadoria;
+      CDSProdutosNCM.AsString := FCI.Registros_5020.Objects[I].CodigoNCM;
+      CDSProdutosCodigoGtin.AsString := FCI.Registros_5020.Objects[I].CodigoGtin;
+      CDSProdutosUnidadeMedida.AsString := FCI.Registros_5020.Objects[I].UnidadeMedida;
+      CDSProdutosValorSaidaMercadoria.AsCurrency := FCI.Registros_5020.Objects[I].ValorSaidaMercadoria;
+      CDSProdutosValorParcelaImportada.AsCurrency := FCI.Registros_5020.Objects[I].ValorParcelaImportada;
+      CDSProdutosPercentualConteudoImportacao.AsCurrency := FCI.Registros_5020.Objects[I].PercentualConteudoImportacao;
+      CDSProdutosCodigoFCI.AsString := FCI.Registros_5020.Objects[I].CodigoFCI;
+      CDSProdutosIndicadorValidacaoFicha.AsString := FCI.Registros_5020.Objects[I].IndicadorValidacaoFicha;
+      CDSProdutos.Post;
+    end;
 
-  CDSProdutos.Close;
-  CDSProdutos.CreateDataSet;
-  CDSProdutos.Open;
-  for I := 0 to FCI.Registros_5020.Count - 1 do
-  begin
-    CDSProdutos.Append;
-    CDSProdutosNomeMercadoria.AsString := FCI.Registros_5020.Objects[I].NomeMercadoria;
-    CDSProdutosCodigoMercadoria.AsString := FCI.Registros_5020.Objects[I].CodigoMercadoria;
-    CDSProdutosNCM.AsString := FCI.Registros_5020.Objects[I].CodigoNCM;
-    CDSProdutosCodigoGtin.AsString := FCI.Registros_5020.Objects[I].CodigoGtin;
-    CDSProdutosUnidadeMedida.AsString := FCI.Registros_5020.Objects[I].UnidadeMedida;
-    CDSProdutosValorSaidaMercadoria.AsCurrency := FCI.Registros_5020.Objects[I].ValorSaidaMercadoria;
-    CDSProdutosValorParcelaImportada.AsCurrency := FCI.Registros_5020.Objects[I].ValorParcelaImportada;
-    CDSProdutosPercentualConteudoImportacao.AsCurrency := FCI.Registros_5020.Objects[I].PercentualConteudoImportacao;
-    CDSProdutosCodigoFCI.AsString := FCI.Registros_5020.Objects[I].CodigoFCI;
-    CDSProdutosIndicadorValidacaoFicha.AsString := FCI.Registros_5020.Objects[I].IndicadorValidacaoFicha;
-    CDSProdutos.Post;
+    Application.MessageBox(PWideChar('Arquivo "' + EdtArquivoRetorno.Text + '" lido com sucesso.'), 'InformaÃ§Ã£o', MB_ICONINFORMATION + MB_OK);
+  finally
+    FCI.free;  
   end;
-
-  Application.MessageBox(PWideChar('Arquivo "' + EdtArquivoRetorno.Text + '" lido com sucesso.'), 'Informação', MB_ICONINFORMATION + MB_OK);
 end;
 
 procedure TFrmPrincipal.BtnLimparCamposClick(Sender: TObject);
@@ -226,7 +245,7 @@ end;
 
 procedure TFrmPrincipal.BtnSobreClick(Sender: TObject);
 begin
-  Application.MessageBox('Programa gerador e leitor de arquivos FCI desenvolvido por "Valter Patrick Silva Ferreira". Contribuição para o ACBr. Para maiores informações entre em contato pelo e-mail "valterpatrick@hotmail.com".', 'Informação',
+  Application.MessageBox('Programa gerador e leitor de arquivos FCI desenvolvido por "Valter Patrick Silva Ferreira". ContribuiÃ§Ã£o para o ACBr. Para maiores informaÃ§Ãµes entre em contato pelo e-mail "valterpatrick@hotmail.com".', 'InformaÃ§Ã£o',
     MB_ICONINFORMATION + MB_OK);
 end;
 
