@@ -198,7 +198,7 @@ begin
       CDSProdutos.Post;
     end;
 
-    Application.MessageBox(PWideChar('Arquivo "' + EdtArquivoRetorno.Text + '" lido com sucesso.'), 'Informação', MB_ICONINFORMATION + MB_OK);
+    Application.MessageBox(PWideChar(Format('Arquivo "%s" lido com sucesso.',[EdtArquivoRetorno.Text])), 'Informação', MB_ICONINFORMATION + MB_OK);
   finally
     FCI.free;  
   end;
